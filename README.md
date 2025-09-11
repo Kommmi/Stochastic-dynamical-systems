@@ -6,7 +6,7 @@ This python library contains functions that helps compute the rate at which pert
 **(a)** Evolution of perturbations in the pure state of a tent map with $a=2$.  
 Average rate at which perturbations evolve is obtained using Algorithm-1  
 
-![Evolution of perturbations in the pure state](LLE_trajectory.png)
+![Evolution of perturbations in the pure state](LLE_Trajectory.png)
 
 **(b)** Evolution of perturbations in the mixed state of a tent map with $a=2$.  
 Average rate at which perturbations evolve is obtained using Algorithm-2  
