@@ -274,42 +274,4 @@ def noisy_logistic_map(x0,mu,noise_std=0.0001,bounds='reflect'):
         x_new = np.clip(x_new, 0, 1)
     return x_new
 
-def Evolve_1D_map(Evolution_rule,params,x0s,Bins_rule='Sqrt',custom_bins=None,T=300,show_plt = True):
-    """returns the samples from the distribution after a number of iterations   
 
-    Parameters
-    ----------
-    Evolution_rule : function
-        map function
-    params : array
-        parameters of the map function
-    x0s : array
-        samples from the original distribution
-    Bins_rule : str
-        method to compute number of bins
-    custom_bins : int
-        number of bins
-    T : int
-        number of iterations
-    show_plt : bool 
-        show the plot of the histogram
-
-    Returns
-    -------
-    x0s : array
-        samples from the distribution after T iterations
-    """ 
-    #1. Compute number of samples 
-    Ns = len(x0s)
-    #2. Using number of samples decide on number of bins
-    nbins= compute_bins(x0s,Bins_rule, custom_bins)
-    for i in range(T):
-        x0s=Evolution_rule(x0s, *params)
-    # Calculate the bin edges widths and centers
-    hist, bin_edges = np.histogram(x0s, bins=nbins)
-    bin_widths = [bin_edges[i+1] - bin_edges[i] for i in range(len(bin_edges) - 1)]
-    # 1. Histogram of fiducial trajectory
-    P0 = hist/Ns
-    if show_plt == True:
-        Plot_histogram(P0,bin_edges,bin_widths)
-    return x0s
