@@ -112,6 +112,71 @@ def compute_bins(data: np.ndarray, method: str = "Sqrt", custom_bins: int = None
     raise ValueError("Invalid method or missing custom_bins for 'Custom'.")
 
 # ---------------------------------------------------------------------------
+# Evolution and plotting functions
+# ---------------------------------------------------------------------------
+def Plot_histogram(Probabilities,bin_edges,bin_widths):
+    """plots a histogram
+
+    Parameters
+    ----------
+    Probabilities : array
+        probabilities of the bins
+    bin_edges : array
+        bin edges for the histogram
+    bin_widths : array
+        widths of the bins
+    """
+    plt.figure(figsize=(2, 2))
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+    plt.bar(bin_edges[:-1],Probabilities, width=bin_widths, edgecolor="black", align="edge")
+    plt.xlabel(r'$x$')
+    plt.ylabel(r'$P(x)$')
+    #plt.legend()
+    plt.show()
+    return
+
+def Evolve_1D_map(Evolution_rule,params,x0s,Bins_rule='Sqrt',custom_bins=None,T=300,show_plt = True):
+    """returns the samples from the distribution after a number of iterations   
+
+    Parameters
+    ----------
+    Evolution_rule : function
+        map function
+    params : array
+        parameters of the map function
+    x0s : array
+        samples from the original distribution
+    Bins_rule : str
+        method to compute number of bins
+    custom_bins : int
+        number of bins
+    T : int
+        number of iterations
+    show_plt : bool 
+        show the plot of the histogram
+
+    Returns
+    -------
+    x0s : array
+        samples from the distribution after T iterations
+    """ 
+    #1. Compute number of samples 
+    Ns = len(x0s)
+    #2. Using number of samples decide on number of bins
+    nbins= compute_bins(x0s,Bins_rule, custom_bins)
+    for i in range(T):
+        x0s=Evolution_rule(x0s, *params)
+    # Calculate the bin edges widths and centers
+    hist, bin_edges = np.histogram(x0s, bins=nbins)
+    bin_widths = [bin_edges[i+1] - bin_edges[i] for i in range(len(bin_edges) - 1)]
+    # 1. Histogram of fiducial trajectory
+    P0 = hist/Ns
+    if show_plt == True:
+        Plot_histogram(P0,bin_edges,bin_widths)
+    return x0s
+
+# ---------------------------------------------------------------------------
 # Perturbation Functions
 # ---------------------------------------------------------------------------
 
@@ -385,4 +450,5 @@ def Plot_Gamma_vs_perturbation(fn: str, NsArr: np.ndarray):
     cbar.set_label(r'$N_s$', fontsize=14)
     plt.tight_layout()
     plt.show()
+
     return fig, ax
