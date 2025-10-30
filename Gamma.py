@@ -127,7 +127,7 @@ def Plot_histogram(Probabilities,bin_edges,bin_widths):
         widths of the bins
     """
     plt.figure(figsize=(2, 2))
-    plt.rc('text', usetex=True)
+    #plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
     plt.bar(bin_edges[:-1],Probabilities, width=bin_widths, edgecolor="black", align="edge")
     plt.xlabel(r'$x$')
@@ -452,3 +452,4 @@ def Plot_Gamma_vs_perturbation(fn: str, NsArr: np.ndarray):
     plt.show()
 
     return fig, ax
+
